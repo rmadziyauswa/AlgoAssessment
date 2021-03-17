@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace TGS.Challenge
 {
   /*
@@ -24,7 +27,42 @@ namespace TGS.Challenge
     {
       public bool AreAnagrams(string word1, string word2)
       {
-        return false;
+            if(string.IsNullOrEmpty(word1) || string.IsNullOrEmpty(word2))
+            {
+                throw new ArgumentException();
+            }
+            var punctuationList = new List<char> {' ','.',',','/','?',':',';','"','|','\'','`','!','@','#','&','_','-' };
+            
+            foreach (var c in word1)
+            {
+                if(punctuationList.Contains(c))
+                {
+                    continue;
+                }
+                if(word2.Length > 0 && word2.Contains(c,StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var startIndex = word2.IndexOf(c, StringComparison.InvariantCultureIgnoreCase);
+                    word2 = word2.Remove(startIndex, 1);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            foreach (var w in word2)
+            {
+                if (punctuationList.Contains(w))
+                {
+                    var startIndex = word2.IndexOf(w);
+                    word2 = word2.Remove(startIndex, 1);
+                }
+            }
+            if (word2.Length > 0)
+            {
+                return false;
+            }
+            return true;
       }
     }
 }
