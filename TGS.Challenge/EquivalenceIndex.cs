@@ -1,3 +1,4 @@
+using System.Linq;
 namespace TGS.Challenge
 {
   /*
@@ -17,9 +18,23 @@ namespace TGS.Challenge
 
     public class EquivalenceIndex
     {
-      public int Find(int[] numbers)
+        private const int START_INDEX = 1;
+        private const int DEFAULT_INDEX = -1;
+        public int Find(int[] numbers)
       {
-        return -99;
+            if(numbers.Length > START_INDEX)
+            {
+                for (int i = 0; i < numbers.Length - 1; i++)
+                {
+                    var leftSide = numbers.Where((val, index) => index < i).Sum();
+                    var rightSide = numbers.Where((val, index) => index > i).Sum();
+                    if(leftSide.Equals(rightSide))
+                    {
+                        return i;
+                    }
+                }
+            }
+            return DEFAULT_INDEX;
       }
     }
 }
